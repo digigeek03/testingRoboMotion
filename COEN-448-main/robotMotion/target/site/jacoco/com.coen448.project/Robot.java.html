@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Robot.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">robotMotion</a> &gt; <a href="index.source.html" class="el_package">com.coen448.project</a> &gt; <span class="el_source">Robot.java</span></div><h1>Robot.java</h1><pre class="source lang-java linenums">package com.coen448.project;
+
+public class Robot {
+	// All the possible orientations of the robot
+<span class="fc" id="L5">	enum Orientation</span>
+	{
+<span class="fc" id="L7">		North,</span>
+<span class="fc" id="L8">		South,</span>
+<span class="fc" id="L9">		East,</span>
+<span class="fc" id="L10">		West</span>
+	}
+	int [][] mFloor;
+	// Size of the floor matrix
+	int mFloorDimension;
+	// True if the pen is up, false if the pen is down
+	boolean mIsPenUp;
+	Orientation mOrientation;
+	// Current position of the robot on the floor matrix
+	int mColumn, mRow;
+
+	// Initialize the robot, Constructor
+	public Robot(int sizeN)
+<span class="fc" id="L23">	{</span>
+<span class="fc" id="L24">		Init(sizeN);</span>
+<span class="fc" id="L25">	}</span>
+	// setup pen up
+	public boolean penUp()
+	{
+<span class="fc" id="L29">		mIsPenUp = true;</span>
+<span class="fc" id="L30">		return true;</span>
+	}
+	// setup pen down
+	public boolean penDown()
+	{
+<span class="fc" id="L35">		mIsPenUp = false;</span>
+<span class="fc" id="L36">		return true;</span>
+	}
+	// setup turn right
+	public boolean turnRight()
+	{
+<span class="fc bfc" id="L41" title="All 2 branches covered.">		if(mOrientation == Orientation.North)</span>
+		{
+<span class="fc" id="L43">			mOrientation = Orientation.East;</span>
+		}
+<span class="fc bfc" id="L45" title="All 2 branches covered.">		else if(mOrientation == Orientation.South)</span>
+		{
+<span class="fc" id="L47">			mOrientation = Orientation.West;</span>
+		}
+<span class="fc bfc" id="L49" title="All 2 branches covered.">		else if(mOrientation == Orientation.East)</span>
+		{
+<span class="fc" id="L51">			mOrientation = Orientation.South;</span>
+		}
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">		else if(mOrientation == Orientation.West)</span>
+		{
+<span class="fc" id="L55">			mOrientation = Orientation.North;</span>
+		}
+<span class="fc" id="L57">		return true;</span>
+	}
+	// setup turn left
+	public boolean turnLeft()
+	{
+<span class="fc bfc" id="L62" title="All 2 branches covered.">		if(mOrientation == Orientation.North)</span>
+		{
+<span class="fc" id="L64">			mOrientation = Orientation.West;</span>
+		}
+<span class="fc bfc" id="L66" title="All 2 branches covered.">		else if(mOrientation == Orientation.South)</span>
+		{
+<span class="fc" id="L68">			mOrientation = Orientation.East;</span>
+		}
+<span class="fc bfc" id="L70" title="All 2 branches covered.">		else if(mOrientation == Orientation.East)</span>
+		{
+<span class="fc" id="L72">			mOrientation = Orientation.North;</span>
+		}
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">		else if(mOrientation == Orientation.West)</span>
+		{
+<span class="fc" id="L76">			mOrientation = Orientation.South;</span>
+		}
+<span class="fc" id="L78">		return true;</span>
+	}
+	// setup move forward
+	public boolean moveForward(int spaceS)
+	{
+		// Move forward in the direction the robot is facing
+<span class="fc bfc" id="L84" title="All 2 branches covered.">		if(mOrientation == Orientation.North)</span>
+		{
+			// Avoid going outside of the floor area
+<span class="fc bfc" id="L87" title="All 2 branches covered.">			if(mRow == mFloorDimension -1)</span>
+			{
+<span class="fc" id="L89">				return false;</span>
+			}
+<span class="fc bfc" id="L91" title="All 2 branches covered.">			if (mRow + spaceS &gt; mFloorDimension -1)</span>
+			{
+<span class="fc" id="L93">				return false;</span>
+			}
+<span class="fc" id="L95">			int destination = mRow + spaceS;</span>
+<span class="fc bfc" id="L96" title="All 2 branches covered.">			if(!mIsPenUp)</span>
+			{
+<span class="fc bfc" id="L98" title="All 2 branches covered.">				for (int i = mRow; i &lt;= destination; i++)</span>
+				{
+<span class="fc" id="L100">					mFloor[i][mColumn] = 1;</span>
+				}
+			}
+<span class="fc" id="L103">			mRow = destination;</span>
+<span class="fc" id="L104">		}</span>
+<span class="fc bfc" id="L105" title="All 2 branches covered.">		else if(mOrientation == Orientation.South)</span>
+		{
+			// Avoid going outside of the floor area
+<span class="fc bfc" id="L108" title="All 2 branches covered.">			if(mRow == 0)</span>
+			{
+<span class="fc" id="L110">				return false;</span>
+			}
+<span class="fc bfc" id="L112" title="All 2 branches covered.">			if (mRow - spaceS &lt; 0)</span>
+			{
+<span class="fc" id="L114">				return false;</span>
+			}
+<span class="fc" id="L116">			int destination = mRow - spaceS;</span>
+<span class="fc bfc" id="L117" title="All 2 branches covered.">			if(!mIsPenUp)</span>
+			{
+<span class="fc bfc" id="L119" title="All 2 branches covered.">				for (int i = mRow; i &gt;= destination; i--)</span>
+				{
+<span class="fc" id="L121">					mFloor[i][mColumn] = 1;</span>
+				}
+			}
+<span class="fc" id="L124">			mRow = destination;</span>
+<span class="fc" id="L125">		}</span>
+<span class="fc bfc" id="L126" title="All 2 branches covered.">		else if(mOrientation == Orientation.East)</span>
+		{
+			// Avoid going outside of the floor area
+<span class="fc bfc" id="L129" title="All 2 branches covered.">			if(mColumn == mFloorDimension -1)</span>
+			{
+<span class="fc" id="L131">				return false;</span>
+			}
+<span class="fc bfc" id="L133" title="All 2 branches covered.">			if (mColumn + spaceS &gt; mFloorDimension -1)</span>
+			{
+<span class="fc" id="L135">				return false;</span>
+			}
+<span class="fc" id="L137">			int destination = mColumn + spaceS;</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">			if(!mIsPenUp)</span>
+			{
+<span class="fc bfc" id="L140" title="All 2 branches covered.">				for (int i = mColumn; i &lt;= destination; i++)</span>
+				{
+<span class="fc" id="L142">					mFloor[mRow][i] = 1;</span>
+				}
+			}
+<span class="fc" id="L145">			mColumn = destination;</span>
+<span class="fc" id="L146">		}</span>
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">		else if(mOrientation == Orientation.West)</span>
+		{
+			// Avoid going outside of the floor area
+<span class="fc bfc" id="L150" title="All 2 branches covered.">			if(mColumn == 0)</span>
+			{
+<span class="fc" id="L152">				return false;</span>
+			}
+<span class="fc bfc" id="L154" title="All 2 branches covered.">			if (mColumn - spaceS &lt; 0)</span>
+			{
+<span class="fc" id="L156">				return false;</span>
+			}
+<span class="fc" id="L158">			int destination = mColumn - spaceS;</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">			if(!mIsPenUp)</span>
+			{
+<span class="fc bfc" id="L161" title="All 2 branches covered.">				for (int i = mColumn; i &gt;= destination; i--)</span>
+				{
+<span class="fc" id="L163">					mFloor[mRow][i] = 1;</span>
+				}
+			}
+<span class="fc" id="L166">			mColumn = destination;</span>
+		}
+<span class="fc" id="L168">		return true;</span>
+	}
+	public String printCurrentPosition()
+	{	
+<span class="fc" id="L172">		String output =&quot;&quot;;</span>
+		//	Display the current position of the robot
+<span class="fc" id="L174">		output = &quot;Position:&quot; + mColumn + &quot;,&quot; + mRow;</span>
+<span class="fc" id="L175">		System.out.print(&quot; Position:&quot; + mColumn + &quot;,&quot; + mRow);</span>
+		// Display the current state of the pen
+<span class="fc bfc" id="L177" title="All 2 branches covered.">		if (mIsPenUp)</span>
+		{
+<span class="fc" id="L179">			output +=  &quot; Pen:&quot; + &quot; up&quot;;</span>
+<span class="fc" id="L180">			System.out.print(&quot; Pen:&quot; + &quot; up&quot;);</span>
+		}
+		else
+		{
+<span class="fc" id="L184">			output += &quot; Pen:&quot; + &quot; down&quot;;</span>
+<span class="fc" id="L185">			System.out.print(&quot; Pen:&quot; + &quot; down&quot;);</span>
+		}
+		// Display the current orientation of the robot
+<span class="fc bfc" id="L188" title="All 2 branches covered.">		if(mOrientation == Orientation.North)</span>
+		{
+<span class="fc" id="L190">			output += &quot; Facing:&quot; + &quot; North&quot;;</span>
+<span class="fc" id="L191">			System.out.print(&quot; Facing:&quot; + &quot; North&quot;);</span>
+		}
+<span class="fc bfc" id="L193" title="All 2 branches covered.">		else if(mOrientation == Orientation.South)</span>
+		{
+<span class="fc" id="L195">			output += &quot; Facing:&quot; + &quot; South&quot;;</span>
+<span class="fc" id="L196">			System.out.print(&quot; Facing:&quot; + &quot; South&quot;);</span>
+		}
+<span class="fc bfc" id="L198" title="All 2 branches covered.">		else if(mOrientation == Orientation.East)</span>
+		{
+<span class="fc" id="L200">			output += &quot; Facing:&quot; + &quot; East&quot;;</span>
+<span class="fc" id="L201">			System.out.print(&quot; Facing:&quot; + &quot; East&quot;);</span>
+		}
+<span class="pc bpc" id="L203" title="1 of 2 branches missed.">		else if(mOrientation == Orientation.West)</span>
+		{
+<span class="fc" id="L205">			output += &quot; Facing:&quot; + &quot; West&quot;;</span>
+<span class="fc" id="L206">			System.out.print(&quot; Facing:&quot; + &quot; West&quot;);</span>
+		}
+<span class="fc" id="L208">		System.out.print(&quot;\n&quot;);</span>
+<span class="fc" id="L209">		return output;</span>
+	}
+	//	Display the floor marking, star for marked, space for unmarked
+	public String printFloor()
+	{
+<span class="fc" id="L214">		String output = &quot;&quot;;</span>
+<span class="fc bfc" id="L215" title="All 2 branches covered.">		for (int i = mFloorDimension -1; i &gt;= 0; i--)</span>
+		{
+<span class="fc bfc" id="L217" title="All 2 branches covered.">			for (int j = 0; j &lt; mFloorDimension; j++)</span>
+			{	// if marked, print star, else print space
+<span class="fc bfc" id="L219" title="All 2 branches covered.">				if(mFloor[i][j] == 1)</span>
+				{
+<span class="fc" id="L221">					output += '*';</span>
+<span class="fc" id="L222">					System.out.print('*');</span>
+				}
+				else
+				{
+<span class="fc" id="L226">					output += ' ';</span>
+<span class="fc" id="L227">					System.out.print(' ');</span>
+				}
+			}
+<span class="fc" id="L230">			output += '\n';</span>
+<span class="fc" id="L231">			System.out.print('\n');</span>
+		}
+
+<span class="fc" id="L234">		return output;</span>
+	}
+	// Initialize the floor using the sizeN, set all the elements to 0 and pen up
+	public void Init(int sizeN)
+	{
+		// validate the size of the floor, not less than 0
+<span class="pc bpc" id="L240" title="1 of 2 branches missed.">		if (sizeN &lt; 0)</span>
+		{
+<span class="nc" id="L242">			System.out.println(&quot;Size of the floor cannot be less than ZERO&quot;);</span>
+		}
+<span class="fc" id="L244">		mFloorDimension = sizeN;</span>
+<span class="fc" id="L245">		mFloor = new int [mFloorDimension][mFloorDimension];</span>
+<span class="fc bfc" id="L246" title="All 2 branches covered.">		for (int i = 0; i &lt; mFloorDimension; i++)</span>
+		{
+<span class="fc bfc" id="L248" title="All 2 branches covered.">			for (int j = 0; j &lt; mFloorDimension; j++)</span>
+			{
+<span class="fc" id="L250">				mFloor[i][j] = 0;</span>
+			}
+		}
+		// Initialize the pen
+<span class="fc" id="L254">		mIsPenUp = true;</span>
+
+		// Initialize the orientation
+<span class="fc" id="L257">		mOrientation = Orientation.North;</span>
+
+		// Initialize the position
+<span class="fc" id="L260">		mRow = 0;</span>
+<span class="fc" id="L261">		mColumn = 0;</span>
+<span class="fc" id="L262">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
